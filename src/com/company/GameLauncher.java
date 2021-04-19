@@ -2,14 +2,17 @@ package com.company;
 
 import java.security.NoSuchAlgorithmException;
 
+import static com.company.HMACManagement.createSecretKey;
+import static com.company.HMACManagement.hashMessage;
+
 public class GameLauncher {
     public static void launch(String[] moves) {
 
-        Encryption crypt = new Encryption();
         Game game = new Game(moves);
 
         int computerMove = game.MakeComputerMove();
-        System.out.println("HMAC: " + crypt.hashMessage(game.getMoveName(computerMove)));
+        String secretKey = createSecretKey();
+        System.out.println("HMAC: " + hashMessage(game.getMoveName(computerMove), secretKey));
 
         int playerMove = game.MakePlayerMove();
 
@@ -20,6 +23,6 @@ public class GameLauncher {
             System.out.println(game.calculateResult(computerMove, playerMove));
         }
 
-        System.out.println("HMAC key: " + crypt.getSecretKey());
+        System.out.println("HMAC key: " + secretKey);
     }
 }
